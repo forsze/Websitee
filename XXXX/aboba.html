@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <title>Спасибо за заявку!</title>
+ 
+    
+   <script>    
+        var Database_Name = 'BD';    
+        var Version = 1.0;    
+        var Text_Description = 'My First Web-SQL Example';    
+        var Database_Size = 2 * 1024 * 1024;    
+        var dbObj = openDatabase(Database_Name, Version, Text_Description, Database_Size);    
+        dbObj.transaction(function (tx) {    
+            tx.executeSql('CREATE TABLE IF NOT EXISTS Employee_Table3 (id unique, Name, Location, Locationto, Promo, Comment)');    
+        });    
+    
+        function Insert() {    
+            var id = document.getElementById("tbID").value;    
+            var name = document.getElementById("tbName").value;    
+            var location = document.getElementById("tbLocation").value;
+            var locationto = document.getElementById("tbLocationto").value;
+            var promo = document.getElementById("tbPromo").value;
+            var comment = document.getElementById("tbComment").value;
+            dbObj.transaction(function (tx) {    
+                tx.executeSql('insert into Employee_Table3(id, Name, Location, Locationto, Promo, Comment) values(' + id + ',"' + name + '","' + location + '","' + locationto + '","' + promo + '","' + comment + '")');    
+            });    
+        }    
+        dbObj.transaction(function (tx) {    
+            tx.executeSql('SELECT * FROM Employee_Table3', [], function (tx, results) {    
+                var len = results.rows.length, i;    
+                var str = '';    
+                for (i = 0; i < len; i++) {    
+                str += "<tr>";    
+                str += "<td>" + results.rows.item(i).id + "</td>";    
+                str += "<td>" + results.rows.item(i).Name + "</td>";    
+                str += "<td>" + results.rows.item(i).Location + "</td>";
+                str += "<td>" + results.rows.item(i).Locationto + "</td>";
+                str += "<td>" + results.rows.item(i).Promo + "</td>";
+                str += "<td>" + results.rows.item(i).Comment + "</td>";
+                str += "</tr>";    
+                document.getElementById("tblGrid").innerHTML += str;    
+                str = '';    
+                }    
+            }, null);    
+        });    
+    </script>    
+    
+</head>
+<body>
+ 
+<table id="tblGrid" cellpadding="10px" cellspacing="0" border="1">    
+        <tr style="background-color:black;color:white;font-size:18px;">    
+            <td>    
+                Number   
+            </td>    
+            <td>    
+                Name    
+            </td>    
+            <td>    
+                From   
+            </td>
+            <td>    
+                Where   
+            </td> 
+            <td>    
+                Promo   
+            </td> 
+            <td>    
+                Comment   
+            </td> 
+        </tr>    
+    </table>    
+    
+    </body>
+</html>

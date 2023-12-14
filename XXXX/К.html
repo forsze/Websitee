@@ -1,0 +1,145 @@
+<html>
+ 
+<head>
+    <link href="style.css" rel="stylesheet" type="text/css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500&display=swap" rel="stylesheet">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css"
+        integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+ 
+<!-- скрипт БД -->  
+   <script>    
+        var Database_Name = 'BD';    
+        var Version = 1.0;    
+        var Text_Description = 'My First Web-SQL Example';    
+        var Database_Size = 2 * 1024 * 1024;    
+        var dbObj = openDatabase(Database_Name, Version, Text_Description, Database_Size);    
+        dbObj.transaction(function (tx) {    
+            tx.executeSql('CREATE TABLE IF NOT EXISTS Employee_Table3 (id unique, Name, Location, Locationto, Promo, Comment)');    
+        });    
+ 
+        function Insert() {    
+            var id = document.getElementById("tbID").value;    
+            var name = document.getElementById("tbName").value;    
+            var location = document.getElementById("tbLocation").value;
+            var locationto = document.getElementById("tbLocationto").value;
+            var promo = document.getElementById("tbPromo").value;
+            var comment = document.getElementById("tbComment").value;
+            dbObj.transaction(function (tx) {    
+                tx.executeSql('insert into Employee_Table3(id, Name, Location, Locationto, Promo, Comment) values(' + id + ',"' + name + '","' + location + '","' + locationto + '","' + promo + '","' + comment + '")');    
+            });    
+        }    
+        dbObj.transaction(function (tx) {    
+            tx.executeSql('SELECT * FROM Employee_Table3', [], function (tx, results) {    
+                var len = results.rows.length, i;    
+                var str = '';    
+                for (i = 0; i < len; i++) {    
+                str += "<tr>";    
+                str += "<td>" + results.rows.item(i).id + "</td>";    
+                str += "<td>" + results.rows.item(i).Name + "</td>";    
+                str += "<td>" + results.rows.item(i).Location + "</td>";
+                str += "<td>" + results.rows.item(i).Locationto + "</td>";
+                str += "<td>" + results.rows.item(i).Promo + "</td>";
+                str += "<td>" + results.rows.item(i).Comment + "</td>";
+                str += "</tr>";    
+                document.getElementById("tblGrid").innerHTML += str;    
+                str = '';    
+                }    
+            }, null);    
+        });    
+    </script>    
+<!-- Конец скрипта БД -->   
+ 
+</head>
+ 
+ 
+ 
+ 
+<body>
+  <div style="margin-left: -5%; display: flex; align-items: center; justify-content: center;">
+    <div class="logo" style="margin-right: 12px;">
+      <img src="logo.png" class="logogo" height="200">
+    </div>
+    <div>
+      <span class="text" id="logo">ТАКСИ</span>
+    </div>
+  </div>
+    <div class="menu menuu" >
+        <ul>
+            <li class="text"><a href="index.html">Главная</a></li>
+            <li class="text" style="border-bottom: 4px solid white;"><a href="">Заказать Такси</a></li>
+            <li class="text"><a href="С.html">Контакты</a></li>
+            <li class="text"><a href="4.html">Безопасность</a></li>
+ <li class="text"><a href="5.html">Тарифы</a></li>
+        </ul>
+    </div>
+    <div class="chick">
+        <H3 class="text">ЗАКАЗАТЬ ТАКСИ</H3>
+ 
+    </div>
+ 
+    <div class="container row" style="margin: auto; display: flex; flex-direction: row; justify-content: space-between;">
+        <div class="col"></div>
+        <form action="" method="post" class="form-group col " style="width: 500px;" onsubmit="alert(`Спасибо за заказ!`)">
+            <h3>Заказ такси</h3>
+            <label for="passenger-phone">Телефон</label>
+            <input type="text" id="tbID" name="passenger-phone" class="form-control" placeholder="71234567890">
+            <label for="passenger-name">Имя</label>
+            <input type="text" id="tbName" name="passenger-name"  class="form-control" placeholder="Введите имя" required>
+            <label for="location-from">Откуда?</label>
+            <input type="text" id="tbLocation" name="location-from"  class="form-control" placeholder="Город, Улица, Дом, корпус (если надо)" required>
+            <label for="location-to">Куда?</label>
+            <input type="text" id="tbLocationto" name="location-to" class="form-control" placeholder="Город, Улица, Дом, корпус (если надо)" required>
+            <label for="payment-type">Способ оплаты</label>
+            <select name="payment-type" id="" class="form-select" required>
+                <option value="cash" selected>Наличными</option>
+                <option value="card">Картой</option>
+            </select>
+            <label for="rate">Тариф</label>
+            <select name="rate" id="" class="form-select" required>
+                <option value="econom">Эконом</option>
+                <option value="comfort">Комфорт</option>
+                <option value="business">Бизнес</option>
+            </select>
+            <br>
+            <label for="promo">Промокод</label>
+            <input type="text" id="tbPromo" name="promo" class="form-control" placeholder="Промокод">
+            <label for="comment-for-driver">Комментарий водителю</label>
+            <input type="text" id="tbComment" name="comment-for-driver" class="form-control">
+            <label for="with-pet">Перевозка домашнего животного</label>
+            <input class="form-check-input" type="checkbox" value="with-pet" id="with-pet">
+            <div></div>
+          
+        <button id="btnInsert" onclick="Insert()">Заказать</button>
+        </form>
+        <div class="col"></div>
+    </div>
+ 
+<!-- Вывод таблицы -->   
+<!-- <table id="tblGrid" cellpadding="10px" cellspacing="0" border="1">    
+        <tr style="background-color:black;color:white;font-size:18px;">    
+            <td>    
+                Number   
+            </td>    
+            <td>    
+                Name    
+            </td>    
+            <td>    
+                From   
+            </td>
+            <td>    
+                Where   
+            </td> 
+            <td>    
+                Promo   
+            </td> 
+            <td>    
+                Comment   
+            </td> 
+        </tr>    
+    </table>    
+<!-- Вывод таблицы --> 
+</body>
+ 
+</html>
